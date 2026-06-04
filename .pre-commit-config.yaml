@@ -1,0 +1,18 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: ^packages/(api|db)/
+      - id: ruff-format
+        files: ^packages/(api|db)/
+
+  - repo: local
+    hooks:
+      - id: eslint
+        name: ESLint
+        language: node
+        entry: pnpm --filter ui lint
+        files: ^packages/ui/src/.*\.(ts|tsx)$
+        pass_filenames: false

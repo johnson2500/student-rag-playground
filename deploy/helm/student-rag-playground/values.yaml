@@ -1,0 +1,41 @@
+# ── llm-service (vLLM) ───────────────────────────────────────────────────────
+llm-service:
+  model: meta-llama/Llama-3.2-3B-Instruct
+  resources:
+    limits:
+      nvidia.com/gpu: "1"
+
+# ── pgvector ──────────────────────────────────────────────────────────────────
+pgvector:
+  auth:
+    username: rag
+    password: rag          # override with a Secret in production
+    database: ragdb
+
+# ── MinIO ─────────────────────────────────────────────────────────────────────
+minio:
+  auth:
+    rootUser: minioadmin
+    rootPassword: minioadmin  # override with a Secret in production
+  defaultBuckets: rag-documents
+
+# ── API ───────────────────────────────────────────────────────────────────────
+api:
+  image:
+    repository: ghcr.io/johnson2500/student-rag-playground/api
+    tag: latest
+  env:
+    LLM_MODEL: meta-llama/Llama-3.2-3B-Instruct
+    EMBED_MODEL: sentence-transformers/all-MiniLM-L6-v2
+    RETRIEVAL_TOP_K: "5"
+    CHUNK_SIZE: "1000"
+    CHUNK_OVERLAP: "200"
+    MAX_UPLOAD_BYTES: "20971520"
+
+# ── UI ────────────────────────────────────────────────────────────────────────
+ui:
+  image:
+    repository: ghcr.io/johnson2500/student-rag-playground/ui
+    tag: latest
+  route:
+    enabled: true
