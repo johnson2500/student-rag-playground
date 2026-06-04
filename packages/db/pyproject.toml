@@ -1,3 +1,10 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/student_rag_playground_db"]
+
 [project]
 name = "student-rag-playground-db"
 version = "0.1.0"
@@ -7,6 +14,11 @@ dependencies = [
     "asyncpg>=0.29",
     "alembic>=1.13",
     "pgvector>=0.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.6",
 ]
 
 [tool.ruff]

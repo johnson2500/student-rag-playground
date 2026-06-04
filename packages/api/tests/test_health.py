@@ -1,5 +1,5 @@
-from httpx import AsyncClient, ASGITransport
 import pytest
+from httpx import ASGITransport, AsyncClient
 
 from student_rag_playground.main import app
 

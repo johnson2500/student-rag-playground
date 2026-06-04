@@ -2,9 +2,9 @@ import asyncio
 import os
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 
+from alembic import context
 from student_rag_playground_db.models import Base
 
 config = context.config
@@ -25,9 +25,7 @@ async def run_async_migrations() -> None:
     url = os.environ["DATABASE_URL"]
     connectable = create_async_engine(url)
     async with connectable.connect() as connection:
-        await connection.run_sync(
-            lambda conn: context.configure(connection=conn, target_metadata=target_metadata)
-        )
+        await connection.run_sync(lambda conn: context.configure(connection=conn, target_metadata=target_metadata))
         async with connection.begin():
             await connection.run_sync(lambda _: context.run_migrations())
 
