@@ -12,8 +12,8 @@ COPY packages/db /db
 COPY packages/api/pyproject.toml .
 
 RUN pip install --no-cache-dir uv && \
-    uv pip install --python /usr/bin/python3.12 --system --no-cache-dir /db && \
-    uv pip install --python /usr/bin/python3.12 --system --no-cache-dir .
+    uv pip install --python /opt/app-root/bin/python3.12 --system --no-cache-dir /db && \
+    uv pip install --python /opt/app-root/bin/python3.12 --system --no-cache-dir .
 
 COPY packages/api/src/ src/
 
