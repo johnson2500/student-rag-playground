@@ -11,6 +11,6 @@ RUN npm install -g pnpm && pnpm install --frozen-lockfile
 COPY packages/ui/ packages/ui/
 RUN pnpm --filter @student-rag-playground/ui build
 
-FROM registry.access.redhat.com/ubi9/nginx-120:latest
+FROM nginx:alpine
 COPY --from=build /app/packages/ui/dist /usr/share/nginx/html
-EXPOSE 8080
+EXPOSE 80
