@@ -1,10 +1,16 @@
 FROM node:20-alpine AS build
 WORKDIR /app
-COPY package.json pnpm-lock.yaml* ./
+
+# Copy workspace root manifests for pnpm to resolve the lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/ui/package.json packages/ui/
+
 RUN npm install -g pnpm && pnpm install --frozen-lockfile
-COPY . .
-RUN pnpm build
+
+# Copy UI source and build
+COPY packages/ui/ packages/ui/
+RUN pnpm --filter @student-rag-playground/ui build
 
 FROM registry.access.redhat.com/ubi9/nginx-120:latest
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/packages/ui/dist /usr/share/nginx/html
 EXPOSE 8080

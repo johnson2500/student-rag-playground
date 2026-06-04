@@ -1,13 +1,27 @@
 FROM registry.access.redhat.com/ubi9/python-312:latest
 
+# UBI9 runs as uid 1001 — install deps system-wide with explicit Python 3.12
+USER root
+
 WORKDIR /app
 
-COPY pyproject.toml .
-RUN pip install --no-cache-dir uv && uv sync --no-dev
+# Copy the db package first so the path dep resolves correctly at install time
+COPY packages/db /db
 
-COPY src/ src/
+# Copy api package manifest
+COPY packages/api/pyproject.toml .
+
+RUN pip install --no-cache-dir uv && \
+    uv pip install --python /usr/bin/python3.12 --system --no-cache-dir /db && \
+    uv pip install --python /usr/bin/python3.12 --system --no-cache-dir .
+
+COPY packages/api/src/ src/
+
+RUN chown -R 1001:0 /app && chmod -R g=u /app
+
+USER 1001
 
 ENV PYTHONPATH=/app/src
 EXPOSE 8000
 
-CMD ["uvicorn", "student_rag_playground.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python3.12", "-m", "uvicorn", "student_rag_playground.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -58,8 +58,8 @@ services:
 
   api:
     build:
-      context: packages/api
-      dockerfile: Containerfile
+      context: .
+      dockerfile: packages/api/Containerfile
     env_file: .env
     environment:
       LLM_BASE_URL: http://ollama:11434/v1
@@ -78,8 +78,8 @@ services:
 
   ui:
     build:
-      context: packages/ui
-      dockerfile: Containerfile
+      context: .
+      dockerfile: packages/ui/Containerfile
     ports:
       - "5173:80"
     environment:
